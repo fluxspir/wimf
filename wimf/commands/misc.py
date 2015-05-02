@@ -35,7 +35,7 @@ class AddGpgKey(BaseCommand):
         self.values = {}
     def run(self, values):
         self.values = values
-        new_vault = models.GpgKey(**self.values)
-        models.session.add(new_vault)
+        new_gpgkey = models.GpgKey(**self.values)
+        models.session.add(new_gpgkey)
         models.session.commit()
 
