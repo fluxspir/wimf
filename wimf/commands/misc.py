@@ -7,7 +7,7 @@ import models
 
 class AddKeyword(BaseCommand):
     """ """
-    command__name = "add_keyword"
+    command_name = "add_keyword"
     
     def __init__(self):
        self.values = {}
@@ -18,4 +18,15 @@ class AddKeyword(BaseCommand):
         models.session.add(new_keyword)
         models.session.commit()
 
-class AddGeolocalisation(BaseCommand):
+class AddGeoLocation(BaseCommand):
+    """ """
+    command_name = "add_geolocation"
+    def __init__(self):
+        self.values = {}
+    def run(self, values):
+        self.values = values
+        new_location = models.GeoLocation(**self.values)
+        models.session.add(new_location)
+        models.session.commit()
+
+
