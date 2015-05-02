@@ -1,6 +1,7 @@
 
 #!/usr/bin/env python
 
+import pdb
 from base import BaseCommand
 import models
 
@@ -12,7 +13,9 @@ class AddKeyword(BaseCommand):
        self.values = {}
 
     def run(self, values):
-       new_keyword = models.Keyword(**self.values)
-       models.session.add(new_keyword)
-       models.session.commit()
-        
+        self.values = values
+        new_keyword = models.Keyword(**self.values)
+        models.session.add(new_keyword)
+        models.session.commit()
+
+class AddGeolocalisation(BaseCommand):
