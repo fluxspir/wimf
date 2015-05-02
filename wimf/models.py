@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column
 from sqlalchemy import Integer, String, DateTime, Interval, Numeric
 from sqlalchemy import ForeignKey
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref, relationship
@@ -67,7 +68,8 @@ class GpgKey(Base):
         primary key id may be set to str("NONE")
         """
     __tablename__ = "__gpg_key__"
-    privatekey_id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    key_id = Column(String, unique=True, default=None)
  
 class Belt(Base):
     """ The archive file, encrypted (or not if you're brave :) )
@@ -78,7 +80,7 @@ class Belt(Base):
     __tablename__ = "__belt__"
     id = Column(Integer, primary_key=True)
     vault = Column(Integer, ForeignKey(Vault.id))
-    gpg_keys = Column(Integer, ForeignKey(GpgKey.privatekey_id))
+    gpg_keys = Column(Integer, ForeignKey(GpgKey.key_id))
     timestamp = Column(DateTime, nullable=False)
     #files = relationship("File", secondary=files_belt_table, backref="belt")
 

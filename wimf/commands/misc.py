@@ -29,4 +29,13 @@ class AddGeoLocation(BaseCommand):
         models.session.add(new_location)
         models.session.commit()
 
+class AddGpgKey(BaseCommand):
+    command_name = "add_gpgkey"
+    def __init__(self):
+        self.values = {}
+    def run(self, values):
+        self.values = values
+        new_vault = models.GpgKey(**self.values)
+        models.session.add(new_vault)
+        models.session.commit()
 
