@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-import pdb
+#import pdb
 import os
 import datetime
 
@@ -125,7 +125,6 @@ class File(Base):
     filename = Column(String, nullable=False)
     belt = Column(Integer, ForeignKey(Belt.id))
 
-#def __init__():
 db_url = os.path.join(os.path.expanduser("~"), ".wimf.sql")
 engine = create_engine("sqlite:///{}".format(db_url), 
                                     echo=False, convert_unicode=True)
@@ -134,6 +133,4 @@ Session = scoped_session(sessionmaker(autocommit=False,
                                             bind = engine))
 Base.metadata.create_all(engine)
 session = Session()
-#if name == "__main__":
-#    init() 
-    
+
