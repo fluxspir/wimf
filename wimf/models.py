@@ -91,10 +91,11 @@ class Belt(Base):
     beltname = Column(String, nullable=False)
     gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
     timestamp = Column(DateTime, default=datetime.datetime.now())
-    vault_id = Column(Integer, ForeignKey(Vault.id))
 
-class Tree(Base):
-    """ File's "human logical" access point
+class Tree(Base):  
+    """ Dans le sens "Arborescences"
+
+        File's "human logical" access point
         owner
         timestamp: when "action" iniciated
         duration: timedelta 
@@ -127,8 +128,8 @@ class Entity(Base):
     __tablename__ = "entity"
     id = Column(Integer, primary_key=True)
     filename = Column(String, nullable=False)
-    tree_id = Column(Integer, ForeignKey(Tree.id)) # add constraint tree_id - filename unique
-    belt_id = Column(Integer, ForeignKey(Belt.id)) 
+    tree_id = Column(Integer, ForeignKey(Tree.id), nullable=False) 
+    belt_id = Column(Integer, ForeignKey(Belt.id), nullable=False) 
     geolocation = Column(Integer, ForeignKey(GeoLocation.id))
     timestamp = Column(DateTime, default=datetime.datetime.now())
     extension = Column(String)
