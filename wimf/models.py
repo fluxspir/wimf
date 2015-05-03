@@ -94,7 +94,7 @@ class Belt(Base):
     entities = relationship("Entity", backref="belt")
 
 class Tree(Base):  
-    """ Dans le sens "Arborescences"
+    """ Dans le sens "Arborescences : Path to an entity"
 
         File's "human logical" access point
         owner
@@ -108,10 +108,10 @@ class Tree(Base):
     __tablename__ = "tree"
     id = Column(Integer, primary_key=True)
     owner = Column(String)
+    path = Column(String, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.now())
     duration = Column(Interval)
     geolocation = Column(Integer, ForeignKey(GeoLocation.id))
-    path = Column(String, nullable=False)
     keywords = relationship("Keyword", secondary=tree_keywords_table)
     entities = relationship("Entity", backref="tree")
 

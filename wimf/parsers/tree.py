@@ -37,10 +37,13 @@ class TreeParser(BaseCommand):
                         action="store", dest="geolocation",
                         help="locate the tree events")
         parser.add_option("-p", "--path",
-                        action="store", dest="path"
-                        help="path/to/folder/ in the archive"
+                        action="store", dest="path",
+                        help="path/to/folder/ in the archive")
+        parser.add_option("-k", "--keywords",
+                        action="store", dest="keywords",
+                        help="comma separated list of keywords")
         parser.add_option("-e", "--entities",
-                        action="store", dest="entities"
+                        action="store", dest="entities",
                         help="entities")
 
         (options, args) = parser.parse_args(args)
