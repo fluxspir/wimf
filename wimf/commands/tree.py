@@ -5,7 +5,7 @@ import models
 
 class AddTree(BaseCommand):
     """  """
-    command_name = "add_tree"
+    command_name = "add tree"
     
     def __init__(self):
        self.values = {}

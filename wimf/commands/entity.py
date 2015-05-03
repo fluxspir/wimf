@@ -5,7 +5,7 @@ import models
 
 class AddEntity(BaseCommand):
     """  """
-    command_name = "add_entity"
+    command_name = "add entity"
     
     def __init__(self):
        self.values = {}

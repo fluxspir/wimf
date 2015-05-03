@@ -5,7 +5,7 @@ import models
 
 class AddVault(BaseCommand):
     """  """
-    command_name = "add_vault"
+    command_name = "add vault"
     
     def __init__(self):
        self.values = {}

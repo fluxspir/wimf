@@ -5,7 +5,7 @@ import models
 
 class AddBelt(BaseCommand):
     """  """
-    command_name = "add_belt"
+    command_name = "add belt"
     
     def __init__(self):
        self.values = {}

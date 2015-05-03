@@ -7,7 +7,7 @@ import models
 
 class AddKeyword(BaseCommand):
     """ """
-    command_name = "add_keyword"
+    command_name = "add keyword"
     
     def __init__(self):
        self.values = {}
@@ -20,7 +20,7 @@ class AddKeyword(BaseCommand):
 
 class AddGeoLocation(BaseCommand):
     """ """
-    command_name = "add_geolocation"
+    command_name = "add geolocation"
     def __init__(self):
         self.values = {}
     def run(self, values):
@@ -30,7 +30,7 @@ class AddGeoLocation(BaseCommand):
         models.session.commit()
 
 class AddGpgKey(BaseCommand):
-    command_name = "add_gpgkey"
+    command_name = "add gpgkey"
     def __init__(self):
         self.values = {}
     def run(self, values):
