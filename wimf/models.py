@@ -69,7 +69,7 @@ class Vault(Base):
     name = Column(String, default="")
     geolocation = Column(Integer, ForeignKey(GeoLocation.id))
     price = Column(Numeric, default=0)
-    belts = relationship("Belt", secondary=vault_belts_table)
+    belts = relationship("Belt", secondary=vault_belts_table, backref="vault")
 
 class GpgKey(Base):
     """ 
