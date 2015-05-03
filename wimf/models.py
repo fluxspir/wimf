@@ -91,6 +91,7 @@ class Belt(Base):
     beltname = Column(String, nullable=False)
     gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
     timestamp = Column(DateTime, default=datetime.datetime.now())
+    entities = relationship("Entity", backref="belt")
 
 class Tree(Base):  
     """ Dans le sens "Arborescences"
@@ -100,8 +101,9 @@ class Tree(Base):
         timestamp: when "action" iniciated
         duration: timedelta 
         geolocalisation: ""
+        path
         keywords: 
-        tree
+        entities
     """
     __tablename__ = "tree"
     id = Column(Integer, primary_key=True)
@@ -111,12 +113,12 @@ class Tree(Base):
     geolocation = Column(Integer, ForeignKey(GeoLocation.id))
     path = Column(String, nullable=False)
     keywords = relationship("Keyword", secondary=tree_keywords_table)
-    entities = relationship("Entity")
+    entities = relationship("Entity", backref="tree")
 
 class Entity(Base):
     """ Individual archived file
-        tree_id: location of the file
-        belt_id: element of a Belt
+        tree: location of the file
+        belt: element of a Belt
         geolocalisation do event
         timestamp: of the event
         extension: type of the file
