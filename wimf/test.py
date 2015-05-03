@@ -178,9 +178,10 @@ def test_adding(test):
                         "keywords":  [kws[1], kws[2]], 
                         "entities": [],} ,
                         "Success: while adding tree"),
-        #              { "owner":  , "timestamp":  , "duration":  , "geolocation":  ,
-        #                "keywords":  , "path":  },
-        #                "Success: "),
+#                      { "owner":  , "timestamp":  , "duration": ,
+#                        "geolocation": ,
+#                        "keywords":  , "path":  },
+#                        "Success: "),
                     ]
                 add_tree = commands.tree.AddTree()
                 for values, msg in test_values:
