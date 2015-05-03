@@ -71,26 +71,27 @@ def test_add_vault(test):
         test_values = [
             ( 
                 { "url": None, "name": None, "geolocation": None, 
-                                                    "price": None }, 
-                                            "Success: Vault refuse null url"
+                    "price": None , "belts": [] },
+                    "Success: Vault refuse null url"
             ),
             ( 
                 { "url": "/dev/null", 
-                        "name": "trash", "geolocation": None, "price": None },
-                        "Success: Vault accept local path {}".format(
-                                                                "/dev/null")
+                    "name": "trash", "geolocation": None, "price": None,
+                    "belts": [] },
+                    "Success: Vault accept local path {}".format("/dev/null")
             ),
             ( 
                 { "url": "franck@prometheus.tamentis.com", 
                     "name": "test_price_num", 
                     "geolocation": 1, 
-                    "price": 12.3 },
+                    "price": 12.3, "belts": []  },
                     "Success: Vault accept price numeric and geoloc.id"
             ),
             ( 
                 { "url": "franck@prometheus.tamentis.com", 
                     "name": "test_price_num", 
-                    "geolocation": None, "price": None},
+                    "geolocation": None, "price": None,
+                    "belts": [] },
                     "FAILURE: Vault ACCEPT double entry url-name"
             ),
             ]
@@ -108,38 +109,28 @@ def test_add_vault(test):
 
 def test_add_belt(test):
     if test:
+        q = models.session.query(models.GpgKey)
+        q.all()
         test_values = [
-            ( { "beltname": "1st belt",
-                "gpg_keys": [1,], "timestamp": None,
-                "vault_id": None },
+            ( { "beltname": "1st belt", "gpg_keys": [], 
+                "timestamp": None,},
                 "Success: Belt refuses None values"),
-            ( { "beltname": "2nd belt", "gpg_keys": [1,],
-                "timestamp": datetime.datetime.now(), 
-                "vault_id": 1 },
-                "Success: Belt refuses Non_existing vault_id"),
-            ( { "beltname": "bla", "gpg_keys": [1, 2, 3] ,
-                "timestamp": datetime.datetime.now(),
-                "vault_id": 2 },
-                "Success: Belt refuses inexistent gpg_keys"),
-            ( { "beltname": "should work", "gpg_keys": [1,],
-                "timestamp": datetime.datetime.now(),
-                "vault_id": 2 },
+            ( { "beltname": "2nd belt","gpg_keys": [q[1]],
+                "timestamp": datetime.datetime.now(), },
+                "Success: of ?"),
+            ( { "beltname": "bla","gpg_keys": [q[1], q[2]] ,
+                "timestamp": datetime.datetime.now(), },
+                "Success: of ?"),
+            ( { "beltname": "should work","gpg_keys": [q[3]],
+                "timestamp": datetime.datetime.now(), },
                 "Success: Belt finds vault_id keys and time")
             ]
         add_belt = commands.belt.AddBelt()
         for values, msg in test_values:
             try:
-                pdb.set_trace()
                 add_belt.run(values)
                 print(msg)
             except AttributeError:
-                if not values["vault_id"]:
-                    print(msg)
-                elif values["vault_id"] == 1:
-                    print(msg)
-                elif 2 in values["gpg_keys"]:
-                    print(msg)
-                else:
                     raise
             except sqlalchemy.exc.IntegrityError:
                 raise
@@ -154,17 +145,34 @@ def test_add_belt(test):
 
 def test_add_tree(test):
     if test:
+        kws = models.session.query(models.Keyword)
+        kws = kws.all()
+        ent = models.session.query(models.Entity)
+        ent = ent.all()
         test_values = [
-            ( { "owner": None , "timestamp": None , "duration": None , 
-                "geolocation":  None, "keywords": [] , "path": None },
-                "Success: Tree refuses empty datas "),
-            ( { "owner": "user" , "timestamp": datetime.datetime.now(),
-                "duration": datetime.timedelta(1) , "geolocation": None ,
-                "keywords": [1,] , "path": "path/to/dirname" },
+            ( { "owner": None , 
+                "timestamp": None ,
+                "duration": None , 
+                "geolocation":  None, 
+                "path": None ,
+                "keywords": [] , 
+                "entities": [] }, 
+                "Success: Tree refuses empties datas "),
+            ( { "owner": "user" , 
+                "timestamp": datetime.datetime.now(),
+                "duration": datetime.timedelta(1) , 
+                "geolocation": None ,
+                "path": "path/to/dirname",
+                "keywords": [kws[0]] , 
+                "entities": [], },
                 "Success: geolocalisation, keywords not mandatory" ),
-            ( { "owner": "user2" , "timestamp": None , 
-                "duration": datetime.timedelta(1) , "geolocation": 1 ,
-                "keywords":  [1,3], "path": "path/to/file" },
+            ( { "owner": "user2" , 
+                "timestamp": None , 
+                "duration": datetime.timedelta(1) , 
+                "geolocation": 1 ,
+                "path": "path/to/dirfile" ,
+                "keywords":  [kws[1], kws[2]], 
+                "entities": [],} ,
                 "Success: while adding tree"),
 #              { "owner":  , "timestamp":  , "duration":  , "geolocation":  ,
 #                "keywords":  , "path":  },
@@ -190,7 +198,8 @@ def test_add_entity(test):
     if test:
         test_values = [
             ( { "filename": "name1",
-                "tree_id": 1 , "belt_id": 1,
+                "tree_id": 1 , 
+                "belt_id": 1,
                 "geolocation": 0,
                 "extension": "jpg" , "resolution": "1024x768",
                 "timestamp": None , "md5sum": "",
@@ -198,7 +207,8 @@ def test_add_entity(test):
                 "Success: geolocation set to 0"
             ),
             ( { "filename": "name1",
-                "tree_id": 2 , "belt_id": 1,
+                "tree_id": 2 , 
+                "belt_id": 1,
                 "geolocation": 1 ,
                 "extension": "mov" , "resolution": "" ,
                 "timestamp": datetime.date.today , "md5sum": "" ,
@@ -225,8 +235,8 @@ def test_add_entity(test):
 
 if __name__ == "__main__":
     test_model(True)
-    test_add_keyword_geolocation_gpg(True)
-    test_add_vault(True)
-    test_add_belt(True)
+    test_add_keyword_geolocation_gpg(False)
+    test_add_vault(False)
+    test_add_belt(False)
     test_add_tree(False)
-    test_add_entity(False)
+    test_add_entity(True)

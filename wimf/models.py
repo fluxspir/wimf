@@ -37,10 +37,10 @@ Column('gpg_key_id', Integer, ForeignKey('gpg_key.id')),
 Column('belt_id', Integer, ForeignKey('belt.id'))
 )
 # vault - belts
-#vault_belts_table = Table("vault_belts", Base.metadata,
-#Column("belt_id", Integer, ForeignKey("belt.id")),
-#Column("vault_id", Integer, ForeignKey("vault.id"))
-#)
+vault_belts_table = Table("vault_belts", Base.metadata,
+Column("belt_id", Integer, ForeignKey("belt.id")),
+Column("vault_id", Integer, ForeignKey("vault.id"))
+)
 
 class Keyword(Base):
     """ """
@@ -90,7 +90,7 @@ class Belt(Base):
     id = Column(Integer, primary_key=True)
     beltname = Column(String, nullable=False)
     gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
-    timestamp = Column(DateTime, nullable=False)
+    timestamp = Column(DateTime, default=datetime.datetime.now())
     vault_id = Column(Integer, ForeignKey(Vault.id))
 
 class Tree(Base):
