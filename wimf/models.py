@@ -88,9 +88,9 @@ class Belt(Base):
     """
     __tablename__ = "belt"
     id = Column(Integer, primary_key=True)
-    beltname = Column(String, nullable=False)
-    gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
+    name = Column(String, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.now())
+    gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
     entities = relationship("Entity", backref="belt")
 
 class Tree(Base):  
