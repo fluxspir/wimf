@@ -4,9 +4,9 @@ import pdb
 import sys
 import commands
 import models
+import parsers
 
-def get_command(command_action, command_target):
-    command_name = command_action + " " + command_target
+def get_command(command_name):
     for attrname in dir(commands):
         
         if "Add" not in attrname and "List" not in attrname \
@@ -23,12 +23,32 @@ def get_command(command_action, command_target):
                 return attr
     return None
 
+def get_parser(command_target):
+    for attrname in dir(parsers):
+        if "Keyword" not in attrname and "GeoLocation" not in attrname\
+                                    and "GpgKey" not in attrname\
+                                    and "Vault" not in attrname\
+                                    and "Belt" not in attrname\
+                                    and "Tree" not in attrname\
+                                    and "Entity" not in attrname:
+            continue
+        attr = getattr(parsers, attrname)
+        if hasattr(attr, "parser_name"):
+            if attr.parser_name == command_target:
+                return attr
+    return None
+        
+
 command_action = sys.argv[1]
 command_target = sys.argv[2]
+command_name = command_action + " " + command_target
 args = sys.argv[3:]
 
+ParserClass = get_parser(command_target)
+prs = ParserClass()
+(options, args) = prs.parse_args(command_name, args)
 
-CommandClass = get_command(command_action, command_target)
 
+CommandClass = get_command(command_name)
 cmd = CommandClass()
-cmd.run(args)
+cmd.run(options)

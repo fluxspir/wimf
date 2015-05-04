@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 
-import sys
-from optparse import OptionParser
+from base import BaseParser
 
-
-def __init__(self):
-    pass
-
-class BaseCommand():
-
-    def get_parser(self):
-        return OptionParser("usage=%prog {}".format(self.command_name))
-
-class VaultParser(BaseCommand):
+class VaultParser(BaseParser):
+    parser_name = "vault"
     def parse_args(self, command_name, args):
+
         self.command_name = command_name
+
         parser = self.get_parser()
 
         parser.add_option("-i", "--id", 
@@ -31,10 +24,10 @@ class VaultParser(BaseCommand):
                         action="store", dest="geolocation",
                         help="where the vault is physically")
         parser.add_option("-p", "--price",
-                        action="store", type=float, dest="price"
+                        action="store", type=float, dest="price",
                         help="the price you paid/are paying for the vault")
         parser.add_option("-b", "--belt",
-                        action="store", type=int, dest="belt"
+                        action="store", type=int, dest="belt",
                         help="belt store in vault")
 
         (options, args) = parser.parse_args(args)

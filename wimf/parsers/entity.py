@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 
 import sys
-from optparse import OptionParser
+from base import BaseParser
 
 
-def __init__(self):
-    pass
-
-class BaseCommand():
-
-    def get_parser(self):
-        return OptionParser("usage=%prog {}".format(self.command_name))
-
-class EntityParser(BaseCommand):
+class EntityParser(BaseParser):
+    parser_name = "entity"
     def parse_args(self, command_name, args):
         self.command_name = command_name
         parser = self.get_parser()

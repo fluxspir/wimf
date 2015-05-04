@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 
 import sys
-from optparse import OptionParser
+from base import BaseParser
 
 
-def __init__(self):
-    pass
-
-class BaseCommand():
-
-    def get_parser(self):
-        return OptionParser("usage=%prog {}".format(self.command_name))
-
-class KeywordParser(BaseCommand):
+class KeywordParser(BaseParser):
+    parser_name = "keyword"
     def parse_args(self, command_name, args):
         self.command_name = command_name
         parser = self.get_parser()
@@ -29,7 +22,8 @@ class KeywordParser(BaseCommand):
 
         return options, args
 
-class GeoLocationParser(BaseCommand):
+class GeoLocationParser(BaseParser):
+    parser_name = "geolocation"
     def parse_args(self, command_name, args):
         self.command_name = command_name
         parser = self.get_parser()
@@ -47,7 +41,8 @@ class GeoLocationParser(BaseCommand):
 
         return options, args
 
-class GpgKeyParser(BaseCommand):
+class GpgKeyParser(BaseParser):
+    parser_name = "gpgkey"
     def parse_args(self, command_name, args):
         self.command_name = command_name
         parser = self.get_parser()
