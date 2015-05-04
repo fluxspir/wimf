@@ -48,7 +48,6 @@ ParserClass = get_parser(command_target)
 prs = ParserClass()
 (options, args) = prs.parse_args(command_name, args)
 
-
 CommandClass = get_command(command_name)
 cmd = CommandClass()
 cmd.run(options)

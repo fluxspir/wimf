@@ -16,11 +16,11 @@ class KeywordParser(BaseParser):
         
         parser = self.get_parser()
 
-        parser.add_option("-i", "--id", 
+        parser.add_argument("-i", "--id", 
                         type=int, dest="keyword_id", 
                         default=None,
                         help="specify an id")
-        parser.add_option("-k", "--keyword", action="store",
+        parser.add_argument("-k", "--keyword", action="store",
                         type="string", dest="keyword",
                         help="whatever needed keyword")
 
@@ -42,13 +42,13 @@ class GeoLocationParser(BaseParser):
         self.command_name = command_name
         parser = self.get_parser()
 
-        parser.add_option("-i", "--id", 
+        parser.add_argument("-i", "--id", 
                         type=int, action="store", dest="geolocation_id",
                         help="id of the geo_location")
-        parser.add_option("-n", "--name",
+        parser.add_argument("-n", "--name",
                         type="string", action="store", dest="geolocation",
                         help="aproximativ location")
-        parser.add_option("--gps",
+        parser.add_argument("--gps",
                         type="string", action="store", dest="gps",
                         help="precise location")
         (options, args) = parser.parse_args(args)
@@ -70,10 +70,10 @@ class GpgKeyParser(BaseParser):
         self.command_name = command_name
         parser = self.get_parser()
 
-        parser.add_option("-i", "--id",
+        parser.add_argument("-i", "--id",
                         type=int, action="store", dest="gpgkey_id",
                         help="id of key")
-        parser.add_option("-K", "--key", "--gpg",
+        parser.add_argument("-K", "--key", "--gpg",
                         type="string", action="store", dest="gpgkey",
                         help="key number identifier")
         (options, args) = parser.parse_args(args)

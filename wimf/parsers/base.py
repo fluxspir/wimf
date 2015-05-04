@@ -6,4 +6,4 @@ class BaseParser():
 
     def get_parser(self):
         return arg.parse.ArgumentParser(description=
-                                    "usage=%prog {}".format(self.command_name))
+                                    "Relate a file to its location")
