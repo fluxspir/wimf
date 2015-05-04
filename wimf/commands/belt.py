@@ -11,14 +11,7 @@ class AddBelt(BaseCommand):
        self.values = {}
     
     def run(self, options):
-        import pdb
-        pdb.set_trace()
-        self.values = {
-            "name": options.name.decode("utf_8"),
-            "timestamp": options.timestamp,
-            "gpg_keys": options.gpg_keys,
-            "entities": options.entities,
-            }
+        self.values = options
         new_belt = models.Belt(**self.values)
         models.session.add(new_belt)
         models.session.commit()

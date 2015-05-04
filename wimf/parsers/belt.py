@@ -75,7 +75,6 @@ class BeltParser(BaseParser):
         elif options.gpg_key:
             # unifying variable used by Command, later
             options.gpg_keys = self._get_gpg_key(options.gpg_key)
-            pdb.set_trace()
         else:
             pass
 
