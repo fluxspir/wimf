@@ -271,10 +271,10 @@ def test_adding(test):
 
         test_model(True)
         test_add_keyword_geolocation_gpg(True)
-        test_add_vault(False)
-        test_add_belt(False)
-        test_add_tree(False)
-        test_add_entity(False)
+        test_add_vault(True)
+        test_add_belt(True)
+        test_add_tree(True)
+        test_add_entity(True)
 
 def test_parsing(test):
     if test:
@@ -305,5 +305,5 @@ def test_parsing(test):
 
 if __name__ == "__main__":
     test_adding(True)
-    test_parsing(False)
+    test_parsing(True)
 

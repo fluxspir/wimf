@@ -10,13 +10,13 @@ class AddKeyword(BaseCommand):
     command_name = "add keyword"
     
     def __init__(self):
-        self.values = values
+        self.values = {}
     
-    def run(self, options={}):
-        if not self.values:
-            self.values = {
-                "keyword": options.keyword.decode("utf_8"),
-                }
+    def run(self, options):
+        pdb.set_trace()
+        self.values = {
+            "keyword": options.keyword.decode("utf_8"),
+            }
         new_keyword = models.Keyword(**self.values)
         models.session.add(new_keyword)
         models.session.commit()
