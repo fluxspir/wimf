@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-from optparse import OptionParser
+import argparse
 
 class BaseParser():
 
     def get_parser(self):
-        return OptionParser("usage=%prog {}".format(self.command_name))
-
-
+        return arg.parse.ArgumentParser(description=
+                                    "usage=%prog {}".format(self.command_name))
