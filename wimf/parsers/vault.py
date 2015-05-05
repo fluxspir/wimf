@@ -62,9 +62,11 @@ class VaultParser(BaseParser):
         parser.add_argument("--beltids", nargs="*",
                         action="store", type=int, dest="belt_ids",
                         help="list of belt-ID stored in vault")
-        # this hidden option is for creating later a "belts" list of
+        #### this hidden option is for creating later a "belts" list of
         # belts from belt_id and belt_name
         parser.add_argument("--belts", nargs="*", help=argparse.SUPPRESS)
+        ####
+
         namespace = parser.parse_args(args)
         if namespace.url:
             namespace.url = self._decode_utf8(namespace.url)
