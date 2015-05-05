@@ -270,11 +270,11 @@ def test_adding(test):
                             raise
 
         test_model(True)
-        test_add_keyword_geolocation_gpg(True)
-        test_add_vault(True)
-        test_add_belt(True)
-        test_add_tree(True)
-        test_add_entity(True)
+        test_add_keyword_geolocation_gpg(False)
+        test_add_vault(False)
+        test_add_belt(False)
+        test_add_tree(False)
+        test_add_entity(False)
 
 def test_parsing(test):
     if test:
@@ -282,7 +282,7 @@ def test_parsing(test):
             if test:
                 # Test parsing keyword (not effective)
                 test_values = [
-                    ( None , None, "FAILURE: Empty command_name and args are parsed"),
+                    ( "add_keyword", None, "FAILURE: Empty command_name and args are parsed"),
                     ( "add_other", [], 
                         "FAILURE: weird command_name refused"),
                     ( "add_keyword", [], 
@@ -292,13 +292,51 @@ def test_parsing(test):
                     ( "add_keyword", [ "--keyword", "test various parsed keyword 2"],
                         "Success: test various parsed" )
                     ]
-                parse_keyword = parsers.misc.KeywordParser()
+                parse_keyword = parsers.KeywordParser()
                 for command_name, args, msg in test_values:
                     try:
-                        parse_keyword.parse_args(command_name, args)
-                        print(msg)
+                        (namespace, args) = parse_keyword.parse_args(
+                                                            command_name, args)
+                        print(namespace, msg)
                     except:
+                        print(args)
                         raise
+
+                # Test parsing geolocation
+                test_values = [ 
+                    ( "add geolocation", 
+                        [ "-n", "paris", "--gps", "0.23.1,180.12.3"], 
+                        "Success: paris et gpg" ),
+                    ( "add_geolocation",
+                        [ "-n", "new york"], 
+                        "Success: new york" )
+                ]
+                parse_geoloc = parsers.GeoLocationParser()
+                for command_name, args, msg in test_values:
+                    try:
+                        (namespace, args) = parse_geoloc.parse_args(
+                                                            command_name, args)
+                        print(namespace, msg)
+                    except:
+                        print(args)
+                        raise
+
+                # Test parsing gpgkeys
+                test_values = [
+                    ( "add_gpgkey",
+                        [ "-K", "4096/123456" ],
+                        "Success: adding gpg key"),
+                ]
+                parse_gpg = parsers.GpgKeyParser()
+                for command_name, args, msg in test_values:
+                    try:
+                        (nsp, args) = parse_keyword.parse_args(
+                                                    command_name, args)
+                        print(nsp, msg)
+                    except:
+                        print(args)
+                        raise
+
 
         test_parsing_misc(True)
 
