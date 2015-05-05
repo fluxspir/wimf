@@ -90,6 +90,8 @@ class Belt(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
     timestamp = Column(DateTime, default=datetime.datetime.now())
+    md5sum = Column(String)
+    signature = Column(String)
     gpg_keys = relationship("GpgKey", secondary=belt_gpg_keys_table)
     entities = relationship("Entity", backref="belt")
 

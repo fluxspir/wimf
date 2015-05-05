@@ -56,7 +56,13 @@ class BeltParser(BaseParser):
         #### hidden argument to make the gpg-key mix of names and ids
         parser.add_argument("--gpg_keys_instances", help=argparse.SUPPRESS)
         ####
-        parser.add_argument("-d", "--datetime", "--timestamp",
+        parser.add_argument("--md5", "--md5sum",
+                        action="store", dest="md5sum",
+                        help="md5sum of the belt")
+        parser.add_argument("-S", "--signature",
+                        action="store", dest="signature",
+                        help="signature of the belt")
+        parser.add_argument("-t", "--timestamp",
                         action="store", dest="timestamp",
                         help="belt creation datetime")
         parser.add_argument("-e", "--entities", nargs="*",
