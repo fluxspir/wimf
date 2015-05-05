@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import pdb
 import models
 from base import BaseParser
 import dateutil.parser

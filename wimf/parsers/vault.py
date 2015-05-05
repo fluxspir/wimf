@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pdb
+
 from base import BaseParser
 import models
 from sqlalchemy import or_
