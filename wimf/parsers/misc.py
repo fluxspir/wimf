@@ -21,13 +21,13 @@ class KeywordParser(BaseParser):
             parser.add_argument("-i", "--id", type=int, dest="keyword_id", 
                                                     help="specify an id")
 
-        parser.add_argument("-k", "--keyword", nargs="+", action="store",
+        parser.add_argument("keywords", nargs="+", action="store",
                         help="list of keywords")
 
         namespace = parser.parse_args(args)
-        if namespace.keyword:
-            namespace.keyword = [self._decode_utf8 (kw) \
-                                                for kw in namespace.keyword ]
+        if namespace.keywords:
+            namespace.keywords = [self._decode_utf8 (kw) \
+                                                for kw in namespace.keywords ]
         return namespace, args
 
 class GeoLocationParser(BaseParser):

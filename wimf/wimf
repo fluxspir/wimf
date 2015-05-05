@@ -44,20 +44,23 @@ parser = argparse.ArgumentParser(description="Usage=%prog")
 parser.add_argument('command_action', nargs=1, 
                 choices=["add", "update", "list", "find" ],
                 help="action to perform on db (add, list...)")
+
 parser.add_argument('command_target', nargs=1,
                 choices=["keyword", "gpgkey", "geolocation", 
                         "vault", "belt", "tree", "entity" ],
-                            help="on which tables of db the command acts")
-(namespace, args) = parser.parse_known_args(sys.argv[1:])
+                help="on which tables of db the command acts")
 
-command_name = namespace.command_action[0] + " " + namespace.command_target[0]
+(namespace_cmd, args) = parser.parse_known_args(sys.argv[1:])
+
+command_name = namespace_cmd.command_action[0] +\
+                                    " " + namespace_cmd.command_target[0]
 
 # let's retrieve the right parser command
 
-ParserClass = get_parser(namespace.command_target[0])
+ParserClass = get_parser(namespace_cmd.command_target[0])
 prs = ParserClass()
-options = prs.parse_args(command_name, args)
+(namespace_args, args) = prs.parse_args(command_name, args)
 
 CommandClass = get_command(command_name)
 cmd = CommandClass()
-cmd.run(options)
+cmd.run(namespace_args)

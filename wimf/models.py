@@ -46,7 +46,7 @@ class Keyword(Base):
     """ """
     __tablename__ = "keyword"
     id = Column(Integer, primary_key=True)
-    keyword = Column(String, nullable=False)
+    keyword = Column(String, nullable=False, unique=True)
 
 class GeoLocation(Base):
     """ name and/or gps coordinate"""
