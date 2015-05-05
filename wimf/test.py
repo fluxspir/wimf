@@ -305,7 +305,7 @@ def test_parsing(test):
             try:
                 (namespace, args) = parse_keyword.parse_args(
                                                     command_name, args)
-                print(namespace, msg)
+                print("{}\n{}".format(namespace, msg))
             except:
                 print(args)
                 raise
@@ -317,14 +317,14 @@ def test_parsing(test):
                 "Success: paris et gpg" ),
             ( "add_geolocation",
                 [ "-n", "new york"], 
-                "Success: new york" )
+                "Success: geolocation new york was parsed successfully" )
         ]
         parse_geoloc = parsers.GeoLocationParser()
         for command_name, args, msg in test_values:
             try:
                 (namespace, args) = parse_geoloc.parse_args(
                                                     command_name, args)
-                print(namespace, msg)
+                print("{}\n{}".format(namespace, msg))
             except:
                 print(args)
                 raise
@@ -333,7 +333,7 @@ def test_parsing(test):
         test_values = [
             ( "add_gpgkey",
                 [ "-K", "4096/123456" ],
-                "Success: adding gpg key"),
+                "Success: parsing gpg key"),
         ]
         parse_gpg = parsers.GpgKeyParser()
         for command_name, args, msg in test_values:
@@ -341,7 +341,7 @@ def test_parsing(test):
                 pdb.set_trace()
                 (nsp, args) = parse_keyword.parse_args(
                                             command_name, args)
-                print(nsp, msg)
+                print("{}\n{}".format(nsp, msg))
             except:
                 print(args)
                 raise
@@ -353,21 +353,41 @@ def test_parsing(test):
             ( "add_vault",
                 [ "-u", "franck@prometheus.tamentis.com", "-n", "tamentissafe",
                  "-g", "USA", "-p", "0", "--beltname", "should work", "bla",],
-                 "Success, vault with 2 belts added"),
+                 "Success: parsing vault with 2 belts added"),
         ]
         parse_vault = parsers.VaultParser()
         for command_name, args, msg in test_values:
             try:
                 (nsp, args) = parse_vault.parse_args(
                                             command_name, args)
-                print(nsp, msg)
+                print("{}\n{}".format(nsp, msg))
+            except:
+                print(args)
+                raise
+
+    def test_parsing_belt(test):
+        if not test:
+            return
+        test_values = [
+            ( "add belt",
+                [ "-n", "belt_photo_1", "-d", "150505" ],
+                "Success: simple belt without gpg_keys or entities was parsed"
+            )
+        ]
+        parse_belt = parsers.BeltParser()
+        for command_name, args, msg in test_values:
+            try:
+                (nsp, args) = parse_belt.parse_args(
+                                            command_name, args)
+                print("{}\n{}".format(nsp, msg))
             except:
                 print(args)
                 raise
             
 
     test_parsing_misc(False)
-    test_parsing_vault(True)
+    test_parsing_vault(False)
+    test_parsing_belt(True)
 
 
 if __name__ == "__main__":

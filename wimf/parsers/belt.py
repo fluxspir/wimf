@@ -4,6 +4,7 @@ import pdb
 import models
 from base import BaseParser
 import dateutil.parser
+import argparse
 
 class BeltParser(BaseParser):
 
@@ -15,67 +16,79 @@ class BeltParser(BaseParser):
     def _decode_utf8(self, string):
         return string.decode("utf_8")
 
-    def _get_gpg_key(self, gpgkey):
-        gpg_keys = []
-        q = models.session.query(models.GpgKey)
-        q = q.filter(models.GpgKey.key == gpgkey)
-        gpgkey = q.one()
-        gpg_keys.append(gpgkey)
-        return gpg_keys
+    def _get_gpgkey_instance(self, gpgkeys=[], gpgkey_id=0, gpgkey_name=""):
+        """ returns a gpg_key_instance """
+        if gpgkey_id:
+            q = models.session.query(models.GpgKey)
+            q = q.filter(models.GpgKey.id == gpgkey_id).one()
+        else:
+            gpgkey_name = "%{}%".format(gpgkey_name)
+            q = q.filter(models.GpgKey.key.ilike(gpgkey_name)).one()
+        return q
 
-    def _get_gpg_keys(self, keys_list):
-        # let's raise a sqlalchemy error if problem on keys_list
-        # return list of instances.
-        keys_list = keys_list.split(",")
-        gpg_keys = []
-        for key in keys_list:
-            gk_i = models.session.query(models.GgpKey).filter(
-                                models.GpgKey.key == key).one()
-            gpg_keys.append(gk_i)
-        return gpg_keys
+    def _get_entities_instances(self, entities_id=[]):
+        """ returns a list of entities' instances """
+        entities_instances = []
+        for entity_id in entities_id:
+            q = models.session.query(models.Entity)
+            entity = q.filter(models.Entity.id == entity_id).one()
+            entities_instances.append(entity)
+        return entities_instances
 
     def parse_args(self, command_name, args):
         
         self.command_name = command_name
-
+        command_action = self.command_name.split()[0]
         parser = self.get_parser()
 
-        parser.add_option("-i", "--id", 
-                        type=int, dest="belt_id", default=None,
-                        help="specify a belt id")
-        parser.add_option("-n", "--name",
+        if command_name in [ "update" ]:
+            parser.add_argument("-i", "--id", 
+                            type=int, dest="belt_id",
+                            help="specify a belt id")
+        parser.add_argument("-n", "--name", nargs="?",
                         action="store", dest="name",
-                        help="name of the vault")
-        parser.add_option("-g", "--gpg-key",
-                        action="store", dest="gpg_key",
-                        help="one gpg_key used to encrypt the belt")
-        parser.add_option("--gpg-keys",
-                        action="store", dest="gpg_keys",
-                        help="comma separated list of keys between \" \" of keys")
-        parser.add_option("-d", "--datetime", "--timestamp",
+                        help="name of the belt")
+        parser.add_argument("--gpg-keys-id", nargs="*",
+                        action="store", dest="gpg_keys_id", type=int,
+                        help="gpg_keys db_id used to encrypt the belt")
+        parser.add_argument("--gpg-keys-name", "--gpg-keys", nargs="*",
+                        action="store", dest="gpg_keys_name",
+                        help="list of keys used to encrypt the belt")
+        #### hidden argument to make the gpg-key mix of names and ids
+        parser.add_argument("--gpg_keys_instances", help=argparse.SUPPRESS)
+        ####
+        parser.add_argument("-d", "--datetime", "--timestamp",
                         action="store", dest="timestamp",
-                        help="belt creation datetime, ISO : YYYY-mm-dd[@HHMM]")
-        parser.add_option("-e", "--entities", 
-                        action="store", dest="entities",
-                        help="comma separated list between \" \" of entities-id")
+                        help="belt creation datetime")
+        parser.add_argument("-e", "--entities", nargs="*",
+                        action="store", type=int, dest="entities",
+                        help="list of files/entities ID guarded in belt")
 
-        (options, args) = parser.parse_args(args)
+        namespace = parser.parse_args(args)
 
-        if options.name:
-            options.name = self._decode_utf8(options.name)
+        if namespace.name:
+            namespace.name = self._decode_utf8(namespace.name)
 
-        if options.timestamp:
-            options.timestamp = self._check_timestamp(options.timestamp)
+        if namespace.timestamp:
+            namespace.timestamp = self._check_timestamp(namespace.timestamp)
+        
+        if not namespace.gpg_keys_instances:
+            namespace.gpg_keys_instances = []
+            if namespace.gpg_keys_id:
+                for gpgkey_id in namespace.gpg_keys_id:
+                    gpg_key_instance = self._get_gpgkey_instance(
+                                                        gpgkey_id=gpgkey_id)
+                    namespace.gpg_keys_instances.append(gpg_key_instance)
+            elif namespace.gpg_keys_name:
+                for name in namespace.gpg_keys_name:
+                    gpg_key_instance = self._get_gpgkey_instance(
+                                                            gpgkey_name=name)
+                    namespace.gpg_keys_instances.append(gpg_key_instance)
+            else:
+                pass
 
-        if options.gpg_keys and options.gpg_key:
-            # let's make one of this mess
-            options.gpg_keys.append(options.gpg_key)
-        elif options.gpg_keys:
-            options.gpg_keys = self._get_gpg_keys(options.gpg_keys)
-        elif options.gpg_key:
-            # unifying variable used by Command, later
-            options.gpg_keys = self._get_gpg_key(options.gpg_key)
-        else:
-            pass
+        if namespace.entities:
+            namespace.entities = self._get_entities_instances(
+                                                         namespace.entities)
 
-        return options, args
+        return namespace, args
