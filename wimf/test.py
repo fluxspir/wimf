@@ -383,12 +383,32 @@ def test_parsing(test):
             except:
                 print(args)
                 raise
-            
+
+    def test_parsing_tree(test):
+        if not test:
+            return
+        test_values = [
+            ( "add_tree",
+                [ "-p", "path/to/dir", "-o", "franck", "-t", "150503", "-g", 
+                "Paris", "-k", "bla", "123456", "super michel" ],
+                "Success: added tree without entities"
+            )
+        ]
+        parse_tree = parsers.TreeParser()
+        for command_name, args, msg in test_values:
+            try:
+                (nsp, args) = parse_tree.parse_args(
+                                        command_name, args)
+                print("{}\n{}".format(nsp, msg))
+            except:
+                print(args)
+                raise
+
 
     test_parsing_misc(False)
     test_parsing_vault(False)
-    test_parsing_belt(True)
-
+    test_parsing_belt(False)
+    test_parsing_tree(False)
 
 if __name__ == "__main__":
     test_adding(True)

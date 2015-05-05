@@ -18,8 +18,8 @@ class VaultParser(BaseParser):
         ui = "%{}%".format(ui)
         q = models.session.query(models.GeoLocation)
         q = q.filter(or_(
-                        models.GeoLocation.name.ilike(ui)),
-                        (models.GeoLocation.gps.ilike(ui))
+                        models.GeoLocation.name.ilike(ui),
+                        models.GeoLocation.gps.ilike(ui))
                         )
         return q.first()
 

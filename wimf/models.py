@@ -108,7 +108,7 @@ class Tree(Base):
     __tablename__ = "tree"
     id = Column(Integer, primary_key=True)
     owner = Column(String)
-    path = Column(String, nullable=False)
+    path = Column(String, nullable=False, unique=True)
     timestamp = Column(DateTime, default=datetime.datetime.now())
     duration = Column(Interval)
     geolocation = Column(Integer, ForeignKey(GeoLocation.id))
