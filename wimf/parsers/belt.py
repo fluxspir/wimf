@@ -84,14 +84,15 @@ class BeltParser(BaseParser):
                     gpg_key_instance = self._get_gpgkey_instance(
                                                         gpgkey_id=gpgkey_id)
                     namespace.gpg_keys_instances.append(gpg_key_instance)
-            elif namespace.gpg_keys_name:
+            if namespace.gpg_keys_name:
                 for name in namespace.gpg_keys_name:
                     gpg_key_instance = self._get_gpgkey_instance(
                                                             gpgkey_name=name)
                     namespace.gpg_keys_instances.append(gpg_key_instance)
-            else:
-                pass
-
+        if namespace.md5sum:
+            namespace.md5sum = self._decode_utf8(namespace.md5sum)
+        if namespace.signature:
+            namespace.signature = self._decode_utf8(namespace.signature)
         if namespace.entities:
             namespace.entities = self._get_entities_instances(
                                                          namespace.entities)
