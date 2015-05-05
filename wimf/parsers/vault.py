@@ -23,18 +23,16 @@ class VaultParser(BaseParser):
                         )
         return q.first()
 
-    def _get_belt_instance(self, belts=[], belt_id=[], belt_name=[]):
+    def _get_belt_instance(self, belt_id=0, belt_name=""):
         """ return list of belt's instances """
         if belt_id:
             q = models.session.query(models.Belt)
-            q = q.filter(models.Belt.id == belt_id).one()
-            belts.append(q)
-        if belt_name:
+            belt_instance = q.filter(models.Belt.id == belt_id).one()
+        else:
             belt_name = "%{}%".format(belt_name)
             q = models.session.query(models.Belt)
-            q = q.filter(models.Belt.name.ilike(belt_name)).one()
-            belts.append(q)
-        return belts
+            belt_instance = q.filter(models.Belt.name.ilike(belt_name)).one()
+        return belt_instance
 
  
     def parse_args(self, command_name, args):
@@ -79,15 +77,11 @@ class VaultParser(BaseParser):
             namespace.belts = []
             if namespace.belt_names:
                 for name in namespace.belt_names:
-                    belt =  self._get_belt_instance(
-                                                belts=namespace.belts,
-                                                belt_name=name)
+                    belt =  self._get_belt_instance(belt_name=name)
                     namespace.belts.append(belt)
             elif namespace.belt_ids:
                 for belt_id in namespace.belt_ids:
-                    belt = self._get_belt_instance(
-                                                belts=namespace.belts,
-                                                belt_id=belt_id)
+                    belt = self._get_belt_instance(belt_id=belt_id)
                     namespace.belts.append(belt)
             else:
                 pass
