@@ -2,6 +2,7 @@
 
 import pdb
 import sys
+import argparse
 import commands
 import models
 import parsers
@@ -37,16 +38,25 @@ def get_parser(command_target):
             if attr.parser_name == command_target:
                 return attr
     return None
-        
 
-command_action = sys.argv[1]
-command_target = sys.argv[2]
-command_name = command_action + " " + command_target
-args = sys.argv[3:]
+# get the first and second argument to build the command_name
+parser = argparse.ArgumentParser(description="Usage=%prog")
+parser.add_argument('command_action', nargs=1, 
+                choices=["add", "update", "list", "find" ],
+                help="action to perform on db (add, list...)")
+parser.add_argument('command_target', nargs=1,
+                choices=["keyword", "gpgkey", "geolocation", 
+                        "vault", "belt", "tree", "entity" ],
+                            help="on which tables of db the command acts")
+(namespace, args) = parser.parse_known_args(sys.argv[1:])
 
-ParserClass = get_parser(command_target)
+command_name = namespace.command_action[0] + " " + namespace.command_target[0]
+
+# let's retrieve the right parser command
+
+ParserClass = get_parser(namespace.command_target[0])
 prs = ParserClass()
-(options, args) = prs.parse_args(command_name, args)
+options = prs.parse_args(command_name, args)
 
 
 CommandClass = get_command(command_name)
